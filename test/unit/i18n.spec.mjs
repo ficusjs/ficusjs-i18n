@@ -1,0 +1,133 @@
+import test from 'ava'
+import { createI18nInstance } from './helpers/create-i18n.mjs'
+
+let i18n
+
+test.beforeEach(t => {
+  i18n = createI18nInstance()
+})
+
+test('create an i18n instance', t => {
+  t.truthy(i18n)
+})
+
+test('english as the default locale', t => {
+  t.is(i18n.getLocale(), 'en')
+})
+
+test('add messages using default locale', t => {
+  const value1 = i18n.t('title')
+  t.is(value1, 'test')
+  const value2 = i18n.t('nested.title')
+  t.is(value2, 'test2')
+})
+
+test('set locale', t => {
+  i18n.setLocale('es')
+  t.is(i18n.getLocale(), 'es')
+})
+
+test('translation without messages for a locale', t => {
+  i18n.setLocale('es')
+  const value2 = i18n.t('nested.title')
+  t.is(value2, 'nested.title')
+})
+
+test('setting messages for a different locale', t => {
+  i18n.add({
+    title: 'test3',
+    nested: {
+      title: 'test4'
+    }
+  }, 'es')
+  i18n.setLocale('es')
+  const value2 = i18n.t('nested.title')
+  t.is(value2, 'test4')
+})
+
+test('will pluralize english translations', t => {
+  i18n.setLocale('en')
+  i18n.add({
+    items: [
+      '{{ itemCount }} item',
+      '{{ itemCount }} items'
+    ],
+    basketItems: [
+      '{{ count }} item in {{ size }} basket',
+      '{{ count }} items in {{ size }} basket'
+    ],
+    accountCoins: [
+      '{{ coinCount }} coin in {{ account }} account',
+      '{{ coinCount }} coins in {{ account }} account'
+    ]
+  })
+
+  t.is(i18n.t('items', { itemCount: 1 }), '1 item')
+  t.is(i18n.t('items', { itemCount: 2 }), '2 items')
+  t.is(i18n.t('items', { itemCount: '1' }), '1 item')
+  t.is(i18n.t('items', { itemCount: '2' }), '2 items')
+  t.is(i18n.t('items', { itemCount: '15.5' }), '15.5 items')
+
+  t.is(i18n.t('basketItems', { count: 1, size: 'big' }), '1 item in big basket')
+  t.is(i18n.t('basketItems', { count: 2, size: 'small' }), '2 items in small basket')
+
+  t.is(
+    i18n.t('accountCoins', { coinCount: 1, account: 'domestic' }, { pluralizeTo: 'coinCount' }),
+    '1 coin in domestic account'
+  )
+  t.is(
+    i18n.t('accountCoins', { coinCount: 2, account: 'foreign' }, { pluralizeTo: 'coinCount' }),
+    '2 coins in foreign account'
+  )
+
+  t.throws(() => i18n.t('accountCoins', { coinCount: 2, account: 'foreign' }))
+  t.throws(() => i18n.t('items'))
+  t.throws(() => i18n.t('basketItems'))
+})
+
+test('allows extending pluralization rules', t => {
+  i18n.setPluralizationRule('hr', $number => {
+    // https://github.com/symfony/translation/blob/master/PluralizationRules.php#L156
+    return (($number % 10 === 1) && ($number % 100 !== 11)) ? 0 : ((($number % 10 >= 2) && ($number % 10 <= 4) && (($number % 100 < 10) || ($number % 100 >= 20))) ? 1 : 2)
+  }, { pluralizeTo: 'count' })
+
+  i18n.setLocale('hr').add({
+    balls: [
+      '{{ count }} lopta',
+      '{{ count }} lopte',
+      '{{ count }} lopti'
+    ],
+    minutes: [
+      '{{ count }} minuta',
+      '{{ count }} minute',
+      '{{ count }} minuta'
+    ]
+  })
+
+  t.is(i18n.t('balls', { count: 1 }), '1 lopta')
+  t.is(i18n.t('balls', { count: 2 }), '2 lopte')
+  t.is(i18n.t('balls', { count: 5 }), '5 lopti')
+
+  t.is(i18n.t('minutes', { count: 1 }), '1 minuta')
+  t.is(i18n.t('minutes', { count: 2 }), '2 minute')
+  t.is(i18n.t('minutes', { count: 5 }), '5 minuta')
+  t.is(i18n.t('minutes', { count: 6 }), '6 minuta')
+  t.is(i18n.t('minutes', { count: 12 }), '12 minuta')
+  t.is(i18n.t('minutes', { count: 18 }), '18 minuta')
+  t.is(i18n.t('minutes', { count: 22 }), '22 minute')
+  t.is(i18n.t('minutes', { count: 28 }), '28 minuta')
+  t.is(i18n.t('minutes', { count: 1328 }), '1328 minuta')
+})
+
+test('will parse template with custom user interpolate RE', t => {
+  i18n.add({ welcomeMessage: 'Hello $userName' })
+  i18n.interpolateWith(/\$(\w+)/g)
+
+  t.is(i18n.t('welcomeMessage', { userName: 'George' }), 'Hello George')
+})
+
+test('will empty registry when clear is called', t => {
+  i18n.add({ title: 'Test title' })
+  i18n.clear()
+  t.is(i18n.t('title'), 'title')
+})
