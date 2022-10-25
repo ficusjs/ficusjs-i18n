@@ -1,6 +1,6 @@
 {
   "name": "@ficusjs/i18n",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Functions for managing translations and localization in FicusJS components",
   "type": "module",
   "main": "dist/index.mjs",
@@ -8,9 +8,9 @@
   "types": "types/index.d.ts",
   "scripts": {
     "build": "run-p build:*",
-    "build:all": "rollup -i src/index.mjs -o dist/index.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
-    "build:i18n": "rollup -i src/i18n.mjs -o dist/i18n.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
-    "build:with-i18n": "rollup -i src/with-i18n.mjs -o dist/with-i18n.mjs -f es -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
+    "build:all": "rollup -i src/index.mjs -o dist/index.mjs -f es -m -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
+    "build:i18n": "rollup -i src/i18n.mjs -o dist/i18n.mjs -f es -m -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
+    "build:with-i18n": "rollup -i src/with-i18n.mjs -o dist/with-i18n.mjs -f es -m -p \"terser={mangle: { keep_fnames: true, toplevel: true, module: true }}\" -p \"filesize={}\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "dev": "run-p serve open",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "ava": "5.0.1",
-    "@ficusjs/core": "2.0.1",
+    "@ficusjs/core": "2.1.0",
     "@ficusjs/renderers": "5.3.1",
     "@rollup/plugin-alias": "4.0.2",
     "@rollup/plugin-commonjs": "23.0.2",
