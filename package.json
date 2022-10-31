@@ -50,7 +50,7 @@
   "devDependencies": {
     "ava": "5.0.1",
     "@ficusjs/core": "2.1.0",
-    "@ficusjs/renderers": "5.3.1",
+    "@ficusjs/renderers": "5.4.0",
     "@rollup/plugin-alias": "4.0.2",
     "@rollup/plugin-commonjs": "23.0.2",
     "@rollup/plugin-node-resolve": "15.0.1",
