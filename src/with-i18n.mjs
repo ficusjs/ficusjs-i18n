@@ -19,3 +19,17 @@ export function withI18n (i18n, options) {
     }
   }
 }
+
+export function withI18nReactive (i18n, options) {
+  return withI18n(i18n, {
+    ...options,
+    created () {
+      if (this.eventBus) {
+        this.eventBus.subscribe('i18n:locale:changed', lng => {
+          this.key = lng
+        })
+      }
+      if (options.created) options.created.call(this)
+    }
+  })
+}

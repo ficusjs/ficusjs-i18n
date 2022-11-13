@@ -2,7 +2,7 @@ import { renderer, html } from 'https://cdn.skypack.dev/@ficusjs/renderers@3/uht
 import { createCustomElement as customElementCreator } from 'https://cdn.skypack.dev/@ficusjs/core'
 import { withLocalState } from 'https://cdn.skypack.dev/@ficusjs/state'
 import { createEventBus, getEventBus, withEventBus } from 'https://cdn.skypack.dev/@ficusjs/event-bus'
-import { createI18n, getI18n, withI18n } from '../../../src/index.mjs'
+import { createI18n, getI18n, withI18n, withI18nReactive } from '../../../src/index.mjs'
 
 function createCustomElement (tagName, options) {
   customElementCreator(tagName, { ...options, renderer })
@@ -18,6 +18,7 @@ export {
   getI18n,
   withEventBus,
   withI18n,
+  withI18nReactive,
   withLocalState,
   html,
   nothing
