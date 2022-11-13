@@ -2,6 +2,7 @@ import { html, createCustomElement } from '../util/component.mjs'
 
 import './publish-button.mjs'
 import './subscribe-button.mjs'
+import './language-switcher.mjs'
 
 createCustomElement(
   'mock-app-with-i18n',

@@ -4,9 +4,10 @@ import { eventBus } from './event-bus.mjs'
 
 createCustomElement(
   'language-switcher',
-  withI18nReactive(i18n,
-    withEventBus(eventBus, {
+  withEventBus(eventBus,
+    withI18nReactive(i18n, {
       buttonClicked (lang) {
+        this.i18n.setLocale(lang)
         this.eventBus.publish('i18n:locale:changed', lang)
       },
       render () {

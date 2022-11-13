@@ -4,8 +4,8 @@ import { eventBus } from './event-bus.mjs'
 
 createCustomElement(
   'publish-button',
-  withI18nReactive(i18n,
-    withEventBus(eventBus, {
+  withEventBus(eventBus,
+    withI18nReactive(i18n, {
       buttonClicked () {
         this.eventBus.publish('increment', undefined)
       },

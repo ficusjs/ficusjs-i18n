@@ -3,8 +3,8 @@ import { i18n } from './i18n.mjs'
 import { eventBus } from './event-bus.mjs'
 
 createCustomElement('subscribe-button',
-  withI18nReactive(i18n,
-    withEventBus(eventBus,
+  withEventBus(eventBus,
+    withI18nReactive(i18n,
       withLocalState({
         state () {
           return { count: 0 }
