@@ -62,4 +62,82 @@ describe('App with i18nReactive and multiple languages', () => {
         .should('have.text', 'Taiwanese')
     })
   })
+
+  describe('switching language to russian', () => {
+    before(() => {
+      cy.get('language-switcher button').eq(2).click()
+    })
+
+    it('switches to russian', () => {
+      cy.get('publish-button button')
+        .should('have.text', 'Увеличить')
+      cy.get('subscribe-button')
+        .should('have.text', 'Вы нажали 5 раза!')
+    })
+
+    it('provides russian translations for the language switcher', () => {
+      cy.get('language-switcher button').eq(0)
+        .should('have.text', 'Английский')
+      cy.get('language-switcher button').eq(1)
+        .should('have.text', 'Итальянский')
+      cy.get('language-switcher button').eq(2)
+        .should('have.text', 'Русский')
+      cy.get('language-switcher button').eq(3)
+        .should('have.text', 'Китайский')
+      cy.get('language-switcher button').eq(4)
+        .should('have.text', 'Тайваньский')
+    })
+  })
+
+  describe('switching language to simplified chinese', () => {
+    before(() => {
+      cy.get('language-switcher button').eq(3).click()
+    })
+
+    it('switches to simplified chinese', () => {
+      cy.get('publish-button button')
+        .should('have.text', '增加')
+      cy.get('subscribe-button')
+        .should('have.text', '您点击了 5 次！')
+    })
+
+    it('provides simplified chinese translations for the language switcher', () => {
+      cy.get('language-switcher button').eq(0)
+        .should('have.text', '英语')
+      cy.get('language-switcher button').eq(1)
+        .should('have.text', '意大利语')
+      cy.get('language-switcher button').eq(2)
+        .should('have.text', '俄语')
+      cy.get('language-switcher button').eq(3)
+        .should('have.text', '简体中文')
+      cy.get('language-switcher button').eq(4)
+        .should('have.text', '繁体中文')
+    })
+  })
+
+  describe('switching language to traditional chinese', () => {
+    before(() => {
+      cy.get('language-switcher button').eq(4).click()
+
+      it('switches to traditional chinese', () => {
+        cy.get('publish-button button')
+          .should('have.text', '增加')
+        cy.get('subscribe-button')
+          .should('have.text', '您點擊了 5 次！')
+      })
+
+      it('provides traditional chinese translations for the language switcher', () => {
+        cy.get('language-switcher button').eq(0)
+          .should('have.text', '英語')
+        cy.get('language-switcher button').eq(1)
+          .should('have.text', '意大利語')
+        cy.get('language-switcher button').eq(2)
+          .should('have.text', '俄語')
+        cy.get('language-switcher button').eq(3)
+          .should('have.text', '簡體中文')
+        cy.get('language-switcher button').eq(4)
+          .should('have.text', '繁體中文')
+      })
+    })
+  })
 })
