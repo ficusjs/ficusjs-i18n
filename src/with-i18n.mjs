@@ -14,6 +14,9 @@ export function withI18n (i18n, options) {
         },
         getLocale () {
           return self._i18n.getLocale()
+        },
+        setLocale (locale) {
+          self._i18n.setLocale(locale)
         }
       }
     }
