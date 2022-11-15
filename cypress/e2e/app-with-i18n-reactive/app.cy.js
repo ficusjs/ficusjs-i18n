@@ -72,7 +72,7 @@ describe('App with i18nReactive and multiple languages', () => {
       cy.get('publish-button button')
         .should('have.text', 'Увеличить')
       cy.get('subscribe-button')
-        .should('have.text', 'Вы нажали 5 раза!')
+        .should('have.text', 'Вы нажали 5 раз!')
     })
 
     it('provides russian translations for the language switcher', () => {
