@@ -1,6 +1,6 @@
 {
   "name": "@ficusjs/i18n",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Functions for managing translations and localization in FicusJS components",
   "type": "module",
   "main": "dist/index.mjs",

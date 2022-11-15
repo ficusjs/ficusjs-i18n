@@ -6,4 +6,6 @@ export interface FicusComponentWithI18n extends HTMLElement {
   setI18n: (i18n: I18n) => void
 }
 
-export declare function withI18n<T> (i18n: I18n, options: CustomElementOptions<T>)
+export declare function withI18n<WT, AT> (i18n: I18n, options: CustomElementOptions<WT, AT>)
+
+export declare function withI18nReactive<WT, AT> (i18n: I18n, options: CustomElementOptions<WT, AT>)

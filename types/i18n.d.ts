@@ -12,6 +12,7 @@ export declare class I18n {
 export interface CustomElementI18n {
   t (key: string, templateData: Object, options: Object): string
   getLocale (): string
+  setLocale (locale: string): void
 }
 
 export declare function createI18n (): I18n
