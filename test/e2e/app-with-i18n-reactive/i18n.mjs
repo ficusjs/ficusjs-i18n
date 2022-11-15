@@ -48,16 +48,8 @@ i18n.add(
   'it'
 )
 
-i18n.setPluralizationRule(
-  'zh-CN',
-  function () {
-    return 0
-  },
-  { pluralizeTo: 'count' }
-)
-
 i18n.add({
-  counter: ['您点击了 {{ count }} 次！'],
+  counter: '您点击了 {{ count }} 次！',
   buttons: {
     increment: '增加',
     english: '英语',
@@ -67,11 +59,10 @@ i18n.add({
     chinese: '简体中文'
   },
   subscribers: '拿了订阅者'
-
 }, 'zh-CN')
 
 i18n.add({
-  counter: ['您點擊了 {{ count }} 次！'],
+  counter: '您點擊了 {{ count }} 次！',
   buttons: {
     increment: '增加',
     english: '英語',
@@ -86,14 +77,20 @@ i18n.add({
 i18n.setPluralizationRule(
   'ru',
   function (count) {
-    return count === 1 ? 0 : 1
+    if (count % 10 === 1) return 0
+    if (count % 10 >= 2 && count % 10 <= 4) return 1
+    return 2
   },
   { pluralizeTo: 'count' }
 )
 
 i18n.add(
   {
-    counter: ['Вы нажали {{ count }} раз!', 'Вы нажали {{ count }} раза!'],
+    counter: [
+      'Вы нажали {{ count }} раз!',
+      'Вы нажали {{ count }} раза!',
+      'Вы нажали {{ count }} раз!'
+    ],
     buttons: {
       increment: 'Увеличить',
       english: 'Английский',
