@@ -1,10 +1,12 @@
 export declare class I18n {
   t (key: string, templateData: Object, options?: Object): string
+  // I think this locale and prefix are optional => thoughts on how to do this?
   add (items: Object, locale: string, prefix: string): I18n
   setLocale (locale: string): I18n
   getLocale (): string
   interpolateWith (userRE: RegExp): I18n
   setPluralizationRule (locale: string, rule: Function, options: Object): I18n
+  // the locale arguments of this function it's not used
   whenUndefined (key: string, locale: string): string
   clear (): I18n
 }
