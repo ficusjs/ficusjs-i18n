@@ -1,5 +1,5 @@
 export declare class I18n {
-  t (key: string, templateData: Object, options: Object): string
+  t (key: string, templateData: Object, options?: Object): string
   add (items: Object, locale: string, prefix: string): I18n
   setLocale (locale: string): I18n
   getLocale (): string
