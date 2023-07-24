@@ -45,6 +45,78 @@ test('setting messages for a different locale', t => {
   t.is(value2, 'test4')
 })
 
+test('setting the locale detection rule to a static string', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule('es')
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a static non-string', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(null)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.not(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a function returning a string', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(() => 'es')
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a function returning a non-string', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(() => null)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.not(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a promise resolving to a string', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(new Promise(resolve => resolve('es')))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a promise resolving to a non-string', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(new Promise(resolve => resolve(null)))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.not(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a function returning a promise resolving to a string', async t => {
+  await i18n.setLocale('en').setLocaleDetectionRule(() =>
+    new Promise(resolve => resolve('es'))
+  ).detectLocale((newLocale, oldLocale) => {
+    t.is(oldLocale, 'en')
+    t.is(newLocale, 'es')
+  })
+})
+
+test('setting the locale detection rule to a function returning a promise resolving to a non-string', async t => {
+  await i18n.setLocale('en').setLocaleDetectionRule(done =>
+    new Promise(resolve => resolve(null))
+  ).detectLocale((newLocale, oldLocale) => {
+    t.is(oldLocale, 'en')
+    t.not(newLocale, 'es')
+  })
+})
+
 test('will pluralize english translations', t => {
   i18n.setLocale('en')
   i18n.add({

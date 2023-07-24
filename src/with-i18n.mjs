@@ -17,6 +17,9 @@ export function withI18n (i18n, options) {
         },
         setLocale (locale) {
           self._i18n.setLocale(locale)
+        },
+        detectLocale (callback) {
+          self._i18n.detectLocale(callback)
         }
       }
     }
@@ -28,8 +31,8 @@ export function withI18nReactive (i18n, options) {
     ...options,
     created () {
       if (this.eventBus) {
-        this.eventBus.subscribe('i18n:locale:changed', lng => {
-          this.key = lng
+        this.eventBus.subscribe('i18n:locale:changed', locale => {
+          this.key = locale
         })
       }
       if (options.created) options.created.call(this)

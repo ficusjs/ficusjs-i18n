@@ -6,6 +6,8 @@ class I18n {
     this.registry = {}
     this.currentLocale = 'en'
     this.interpolateRE = /{{\s*(\w+)\s*}}/g
+    this.localeDetectionRule = () =>
+      new URLSearchParams(globalThis?.window?.location?.search).get('lang')
     this.pluralizationRules = {
       en: {
         pluralizeTo: 'count',
@@ -14,17 +16,9 @@ class I18n {
         }
       }
     }
-    this._init()
+    this.detectLocale()
     globalThis.__ficusjs__ = globalThis.__ficusjs__ || {}
     globalThis.__ficusjs__.i18n = globalThis.__ficusjs__.i18n || this
-  }
-
-  _init () {
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-      const paramLang = new URLSearchParams(window.location.search).get('lang')
-      const lang = !paramLang ? (document.documentElement.lang ? document.documentElement.lang : navigator.language) : paramLang
-      if (lang) this.setLocale(lang)
-    }
   }
 
   _translatePlural (key, variations, data, locale, pluralizeTo) {
@@ -52,8 +46,8 @@ class I18n {
   t (key, templateData, options) {
     options = options || {}
     const locale = options.locale || this.currentLocale
-    const store = options.registry || this.registry
-    const translation = store[locale] && store[locale][key]
+    const registry = options.registry || this.registry
+    const translation = registry[locale] && registry[locale][key]
     if (typeof translation === 'undefined') {
       return this.whenUndefined(key, locale)
     } else if (Array.isArray(translation)) {
@@ -86,6 +80,34 @@ class I18n {
 
   getLocale () {
     return this.currentLocale
+  }
+
+  detectLocale (callback = () => {}) {
+    const oldLocale = this.currentLocale
+    const setLocale = locale => {
+      this.setLocale(typeof locale === 'string'
+        ? locale
+        : globalThis?.document?.documentElement?.lang ||
+          globalThis?.navigator?.language ||
+          oldLocale
+      )
+      callback(this.currentLocale, oldLocale)
+    }
+    const detected = this.localeDetectionRule()
+    if (detected instanceof Promise) {
+      detected.then(setLocale)
+    }
+    else {
+      setLocale(detected)
+    }
+    return this
+  }
+
+  setLocaleDetectionRule(rule) {
+    this.localeDetectionRule = typeof rule === 'function'
+      ? rule
+      : () => rule
+    return this
   }
 
   interpolateWith (userRE) {
