@@ -32,9 +32,29 @@ export function withI18nReactive (i18n, options) {
     created () {
       if (this.eventBus) {
         this.eventBus.subscribe('i18n:locale:changed', locale => {
+
+          // Function that returns an array of all ancestor elements
+          const getAncestorElements = elem => elem.parentElement
+            ? [elem.parentElement].concat(getAncestorElements(elem.parentElement)) : []
+
+          // Find the context's locale, i.e. that of the nearest ancestor with a
+          // 'lang' attribute, or 'undefined' if none exists
+          const contextLocale = getAncestorElements(this)
+            .find(elem => elem.hasAttribute('lang'))?.getAttribute('lang')
+
+          // Set the 'lang' attribute on this element if not already set and if
+          // different than the context's
+          const currentLocale = this.i18n.getLocale()
+          if (currentLocale === contextLocale) {
+            this.removeAttribute('lang')
+          } else {
+            this.setAttribute('lang', currentLocale)
+          }
+
           this.key = locale
         })
       }
+
       if (options.created) options.created.call(this)
     }
   })
