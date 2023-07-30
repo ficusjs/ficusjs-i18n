@@ -32,10 +32,10 @@ export function withI18nReactive (i18n, options) {
     created () {
       if (this.eventBus) {
         this.eventBus.subscribe('i18n:locale:changed', locale => {
-
           // Function that returns an array of all ancestor elements
           const getAncestorElements = elem => elem.parentElement
-            ? [elem.parentElement].concat(getAncestorElements(elem.parentElement)) : []
+            ? [elem.parentElement].concat(getAncestorElements(elem.parentElement))
+            : []
 
           // Find the context's locale, i.e. that of the nearest ancestor with a
           // 'lang' attribute, or 'undefined' if none exists
