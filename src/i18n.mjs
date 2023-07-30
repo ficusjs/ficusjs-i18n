@@ -74,13 +74,11 @@ class I18n {
   }
 
   setLocale (locale) {
-
     // Allow validation and re-writing of the local string
-    const candidate = this.whenChangingLocale(locale)
+    const newLocale = this.whenChangingLocale(locale)
 
     // Do not update locale if new value is null or undefined
-    if (candidate !== undefined && candidate !== null) {
-      const newLocale = String(candidate)
+    if (newLocale != null) {
       this.currentLocale = newLocale
     }
 
@@ -92,7 +90,6 @@ class I18n {
   }
 
   detectLocale (callback = () => {}) {
-
     // Rely in fallback detection methods if new locale is null or undefined
     const setLocale = locale => {
       const oldLocale = this.currentLocale
@@ -108,15 +105,14 @@ class I18n {
     const detected = this.localeDetectionRule()
     if (detected instanceof Promise) {
       detected.then(setLocale)
-    }
-    else {
+    } else {
       setLocale(detected)
     }
 
     return this
   }
 
-  setLocaleDetectionRule(rule) {
+  setLocaleDetectionRule (rule) {
     this.localeDetectionRule = typeof rule === 'function'
       ? rule
       : () => rule
