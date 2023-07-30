@@ -66,7 +66,7 @@ createCustomElement(
 
 ## Installation
 
-FicusJS i18n can be installed in a number of ways.
+FicusJS i18n is a core part of [FicusJS](https://docs.ficusjs.org) but can also be installed independently in a number of ways.
 
 ### CDN
 
@@ -82,7 +82,7 @@ FicusJS i18n is available on [Skypack](https://www.skypack.dev/view/@ficusjs/i18
 
 ### NPM
 
-FicusJS renderers work nicely with build tools such as Snowpack, Webpack or Rollup. If you are using a NodeJS tool, you can install the NPM package.
+FicusJS i18n work nicely with build tools such as Snowpack, Webpack or Rollup. If you are using a NodeJS tool, you can install the NPM package.
 
 ```bash
 npm install @ficusjs/i18n
@@ -126,7 +126,7 @@ That's it! Now open http://localhost:8080 to see a local app.
 
 This project is licensed under the MIT License - see the [`LICENSE`](LICENSE) file for details.
 
-## Contributing to FicusJS renderers
+## Contributing to FicusJS i18n
 
 Any kind of positive contribution is welcome! Please help us to grow by contributing to the project.
 
