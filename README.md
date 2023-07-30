@@ -6,7 +6,7 @@ For documentation visit [https://docs.ficusjs.org/i18n/](https://docs.ficusjs.or
 
 ## Getting started
 
-FicusJS i18n can be used in any FicusJS component. It is recommended to use the `withI18n` or `withI18nReactive` higher order component to make the translation functions available in the component.
+FicusJS i18n can be used in any FicusJS component. It is recommended to use the `withI18n` or `withI18nReactive` functions to make translations available in the component.
 
 ```js
 import { createCustomElement, createI18n, withI18n } from 'https://cdn.skypack.dev/ficusjs@6'
