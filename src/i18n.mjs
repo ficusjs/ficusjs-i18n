@@ -96,14 +96,13 @@ class I18n {
     const detected = this.localeDetectionRule()
     if (detected instanceof Promise) {
       detected.then(setLocale)
-    }
-    else {
+    } else {
       setLocale(detected)
     }
     return this
   }
 
-  setLocaleDetectionRule(rule) {
+  setLocaleDetectionRule (rule) {
     this.localeDetectionRule = typeof rule === 'function'
       ? rule
       : () => rule
