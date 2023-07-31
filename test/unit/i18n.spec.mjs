@@ -27,7 +27,7 @@ test('set locale', t => {
   t.is(i18n.getLocale(), 'es')
 })
 
-test('translation without messages for a locale', t => {
+test.serial('translation without messages for a locale', t => {
   i18n.setLocale('es')
   const value2 = i18n.t('nested.title')
   t.is(value2, 'nested.title')
@@ -43,78 +43,6 @@ test('setting messages for a different locale', t => {
   i18n.setLocale('es')
   const value2 = i18n.t('nested.title')
   t.is(value2, 'test4')
-})
-
-test('setting the locale detection rule to a static string', t => {
-  i18n.setLocale('en')
-    .setLocaleDetectionRule('es')
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.is(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a static non-string', t => {
-  i18n.setLocale('en')
-    .setLocaleDetectionRule(null)
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.not(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a function returning a string', t => {
-  i18n.setLocale('en')
-    .setLocaleDetectionRule(() => 'es')
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.is(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a function returning a non-string', t => {
-  i18n.setLocale('en')
-    .setLocaleDetectionRule(() => null)
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.not(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a promise resolving to a string', async t => {
-  await i18n.setLocale('en')
-    .setLocaleDetectionRule(new Promise(resolve => resolve('es')))
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.is(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a promise resolving to a non-string', async t => {
-  await i18n.setLocale('en')
-    .setLocaleDetectionRule(new Promise(resolve => resolve(null)))
-    .detectLocale((newLocale, oldLocale) => {
-      t.is(oldLocale, 'en')
-      t.not(newLocale, 'es')
-    })
-})
-
-test('setting the locale detection rule to a function returning a promise resolving to a string', async t => {
-  await i18n.setLocale('en').setLocaleDetectionRule(() =>
-    new Promise(resolve => resolve('es'))
-  ).detectLocale((newLocale, oldLocale) => {
-    t.is(oldLocale, 'en')
-    t.is(newLocale, 'es')
-  })
-})
-
-test('setting the locale detection rule to a function returning a promise resolving to a non-string', async t => {
-  await i18n.setLocale('en').setLocaleDetectionRule(done =>
-    new Promise(resolve => resolve(null))
-  ).detectLocale((newLocale, oldLocale) => {
-    t.is(oldLocale, 'en')
-    t.not(newLocale, 'es')
-  })
 })
 
 test('will pluralize english translations', t => {
@@ -202,4 +130,139 @@ test('will empty registry when clear is called', t => {
   i18n.add({ title: 'Test title' })
   i18n.clear()
   t.is(i18n.t('title'), 'title')
+})
+
+test('re-writing the locale string to a string', t => {
+  i18n.setLocale('en')
+  i18n.whenChangingLocale = locale => locale.split('-')[0]
+  i18n.setLocale('pt-BR')
+  t.is(i18n.getLocale(), 'pt')
+  // Must revert to the default hook, because all tests operate on the same i18n object
+  i18n.whenChangingLocale = locale => locale
+})
+
+test('re-writing the locale string to null', t => {
+  i18n.setLocale('en')
+  i18n.whenChangingLocale = locale => null
+  i18n.setLocale('de')
+  t.is(i18n.getLocale(), 'en')
+  // Must revert to the default hook, because all tests operate on the same i18n object
+  i18n.whenChangingLocale = locale => locale
+})
+
+test('re-writing the locale string to undefined', t => {
+  i18n.setLocale('en')
+  i18n.whenChangingLocale = locale => undefined
+  i18n.setLocale('de')
+  t.is(i18n.getLocale(), 'en')
+  // Must revert to the default hook, because all tests operate on the same i18n object
+  i18n.whenChangingLocale = locale => locale
+})
+
+test('setting the locale detection rule to a tring', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule('es')
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to null', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(null)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test('setting the locale detection rule to undefined', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(undefined)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test('setting the locale detection rule to a function returning a string', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(() => 'es')
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test('setting the locale detection rule to a function returning null', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(() => null)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test('setting the locale detection rule to a function returning undefined', t => {
+  i18n.setLocale('en')
+    .setLocaleDetectionRule(() => undefined)
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test.serial('setting the locale detection rule to a promise resolving to a string', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(new Promise(resolve => resolve('es')))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test.serial('setting the locale detection rule to a promise resolving to null', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(new Promise(resolve => resolve(null)))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test.serial('setting the locale detection rule to a promise resolving to undefined', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(new Promise(resolve => resolve(undefined)))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test.serial('setting the locale detection rule to a function returning a promise resolving to a string', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(() => new Promise(resolve => resolve('es')))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'es')
+    })
+})
+
+test.serial('setting the locale detection rule to a function returning a promise resolving to null', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(done => new Promise(resolve => resolve(null)))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
+})
+
+test.serial('setting the locale detection rule to a function returning a promise resolving to undefined', async t => {
+  await i18n.setLocale('en')
+    .setLocaleDetectionRule(done => new Promise(resolve => resolve(undefined)))
+    .detectLocale((newLocale, oldLocale) => {
+      t.is(oldLocale, 'en')
+      t.is(newLocale, 'en')
+    })
 })
