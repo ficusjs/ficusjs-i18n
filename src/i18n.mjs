@@ -38,8 +38,8 @@ class I18n {
   _interpolate (translationString, data) {
     return data
       ? translationString.replace(this.interpolateRE, function (match, param) {
-          return data[param] != null ? data[param] : match
-        })
+        return data[param] != null ? data[param] : match
+      })
       : translationString
   }
 

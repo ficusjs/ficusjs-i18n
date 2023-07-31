@@ -5,10 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2023-07-31
+
+### Updates
+- Implement automatic maintenance of the 'lang' attribute on components with reactive i18n ([#58](https://github.com/ficusjs/ficusjs-i18n/pull/58)) - [@mesr](https://github.com/mesr)
+- Implement hook for locale string validation and re-writing ([#57](https://github.com/ficusjs/ficusjs-i18n/pull/57)) - [@mesr](https://github.com/mesr)
+- Uplift dev dependencies
+
 ## [1.3.0] - 2023-07-25
 
 ### Updates
-- Implement customizable locale detection (#54)
+- Implement customizable locale detection ([#54](https://github.com/ficusjs/ficusjs-i18n/pull/54)) - [@mesr](https://github.com/mesr)
 
 ## [1.2.2] - 2022-12-18
 
