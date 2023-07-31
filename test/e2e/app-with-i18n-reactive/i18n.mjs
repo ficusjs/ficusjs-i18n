@@ -13,8 +13,8 @@ i18n.add(
       english: 'English',
       italian: 'Italian',
       russian: 'Russian',
-      taiwanese: 'Taiwanese',
-      chinese: 'Chinese'
+      chinese: 'Chinese',
+      taiwanese: 'Taiwanese'
     },
     subscribers: 'Get subscribers'
   },
@@ -40,8 +40,8 @@ i18n.add(
       english: 'Inglese',
       italian: 'Italiano',
       russian: 'Russo',
-      taiwanese: 'Taiwanese',
-      chinese: 'Cinese'
+      chinese: 'Cinese',
+      taiwanese: 'Taiwanese'
     },
     subscribers: 'Mostra Gli Ascoltatori'
   },
@@ -55,8 +55,8 @@ i18n.add({
     english: '英语',
     italian: '意大利语',
     russian: '俄语',
-    taiwanese: '繁体中文',
-    chinese: '简体中文'
+    chinese: '简体中文',
+    taiwanese: '繁体中文'
   },
   subscribers: '拿了订阅者'
 }, 'zh-CN')
@@ -68,8 +68,8 @@ i18n.add({
     english: '英語',
     italian: '意大利語',
     russian: '俄語',
-    taiwanese: '繁体中文',
-    chinese: '简体中文'
+    chinese: '简体中文',
+    taiwanese: '繁体中文'
   },
   subscribers: '拿了訂閱者'
 }, 'zh-TW')
@@ -96,8 +96,8 @@ i18n.add(
       english: 'Английский',
       italian: 'Итальянский',
       russian: 'Русский',
-      taiwanese: 'Тайваньский',
-      chinese: 'Китайский'
+      chinese: 'Китайский',
+      taiwanese: 'Тайваньский'
     },
     subscribers: 'получить подписчиков'
   },
