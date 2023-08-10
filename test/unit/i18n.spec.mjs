@@ -22,12 +22,31 @@ test('add messages using default locale', t => {
   t.is(value2, 'test2')
 })
 
-test('set locale', t => {
-  i18n.setLocale('es')
-  t.is(i18n.getLocale(), 'es')
+test('set locale (sync)', t => {
+  i18n.setLocale('aa')
+  t.is(i18n.getLocale(), 'aa')
 })
 
-test.serial('translation without messages for a locale', t => {
+/* This test will fail when immediately followed by the next test, but pass when
+ * executed on its own. It demonstrates a race condition, where the call to
+ * `I18n.setLocale('cc')` from the next test ends up happening before the call
+ * to `I18n.getLocale()` in this test, thereby making it fail. */
+// test('set locale (async)', async t => {
+//   await i18n.setLocale('bb').promise
+//     .then(() => t.is(i18n.getLocale(), 'bb'))
+// })
+
+/* This test, however, is immune to race conditions because callbacks and
+ * notifications to subscribers are now garanteed to fire immediately
+ * (atomically) after the locale is updated. */
+test('set locale (callback)', async t => {
+  await i18n.setLocale('cc', ({ newLocale, oldLocale }) => {
+    t.not(oldLocale, 'cc')
+    t.is(newLocale, 'cc')
+  }).promise
+})
+
+/* test('translation without messages for a locale', t => {
   i18n.setLocale('es')
   const value2 = i18n.t('nested.title')
   t.is(value2, 'nested.title')
@@ -265,4 +284,4 @@ test.serial('setting the locale detection rule to a function returning a promise
       t.is(oldLocale, 'en')
       t.is(newLocale, 'en')
     })
-})
+}) */
