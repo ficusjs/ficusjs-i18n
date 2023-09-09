@@ -1,8 +1,14 @@
-class I18n {
+import { withConcurrency } from './helpers/with-concurrency.mjs'
+import { withScheduling } from './helpers/with-scheduling.mjs'
+import { withNotification } from './helpers/with-notification.mjs'
+
+class I18n extends (withNotification(withScheduling(withConcurrency(Object)))) {
+
   constructor () {
     if (globalThis.__ficusjs__ && globalThis.__ficusjs__.i18n) {
       return globalThis.__ficusjs__.i18n
     }
+    super()
     this.registry = {}
     this.currentLocale = 'en'
     this.interpolateRE = /{{\s*(\w+)\s*}}/g
@@ -73,13 +79,23 @@ class I18n {
     return this
   }
 
-  setLocale (locale) {
+  setLocale (locale, callback) {
     // Allow validation and re-writing of the local string
     const newLocale = this.whenChangingLocale(locale)
-
-    // Do not update locale if new value is null or undefined
-    if (newLocale != null) {
-      this.currentLocale = newLocale
+    // Do not update locale if new value is null or undefined,
+    // or if same as current locale
+    if (newLocale != null && newLocale !== this.currentLocale) {
+      this.withLock(() => {
+        const oldLocale = this.currentLocale
+        const data = { oldLocale, newLocale }
+        const subscribers = [ callback, ...this.subscribers ]
+        // Updating the current locale is kept a sync operation, as opposed to a
+        // scheduled callback, thereby garanteeing that calls to this function
+        // in sync contexts will always return after the update has completed.
+        this.currentLocale = locale
+        // Schedule all callbacks
+        this.schedule(() => Promise.allSettled(this.notifySubscribersAsync(data, subscribers)))
+      })
     }
 
     return this
@@ -89,26 +105,32 @@ class I18n {
     return this.currentLocale
   }
 
-  detectLocale (callback = () => {}) {
+  detectLocale (callback) {
     // Rely in fallback detection methods if new locale is null or undefined
     const setLocale = locale => {
-      const oldLocale = this.currentLocale
       this.setLocale(locale !== undefined && locale !== null
         ? locale
         : globalThis?.document?.documentElement?.lang ||
           globalThis?.navigator?.language
       )
-      callback(this.currentLocale, oldLocale)
     }
 
     // Execute the user-defined locale detection rule
     const detected = this.localeDetectionRule()
     if (detected instanceof Promise) {
-      detected.then(setLocale)
+      this.schedule(() => detected.then(locale => setLocale(locale, callback)))
     } else {
-      setLocale(detected)
+      setLocale(detected, callback)
     }
+    return this
+  }
 
+  withLocale (callback) {
+    this.withLock(() => {
+      const data = this.currentLocale
+      const subscribers = [ callback ]
+      this.schedule(() => Promise.allSettled(this.notifySubscribersAsync(data, subscribers)))
+    })
     return this
   }
 
